@@ -48,3 +48,5 @@ The dataset utilized has the following parameters:
 Note: Because goal_differential is equal to goals - goals_conceded, we will remove the goals and goals_conceded columns from our dataset.
 
 ## Exploratory Data Analysis
+
+![Image of correlation matrix](correlation_matrix_2.png)
