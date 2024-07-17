@@ -1,10 +1,27 @@
-# 2024_ia651_Sheehe_Weaver
+# Machine Learning Final Project
+2024_ia651_Sheehe_Weaver
 
-IA 651 Final Exam Project
+IA 651: Machine Learning
+
+Instructor: Professor Michael Gilbert
+
+Final Project
 
 Kelsey Sheehe & Sarah Weaver
 
-## Dataset Link & Overview
+## Project Overview
+
+### Importance
+
+The goal for this project is to create a formula to predict a team's goal_differential (goals - goals_conceded) using the selected data set (illustrated below). Predicting a team's goal differential can be key for being able to rank teams and make predictions on team's success in the post season. Being able to out-score opponents is largely impactful towards winning games and being a well ranked team. 
+
+### Process
+
+To tackle this project our team used a variety of machine learning techniques learned though out this course. To start we evaluated and examined out selected data. Multiple figures were created to better understand each variable and their relationship with others. The Exploratory Data Analysis was key in determining what processes we should try on our data. Given high correlation for some of the features we opted to perform Principal Component Analysis (PCA) to attempt to reduce the number number of features and determine what features are most important to our model. 
+
+(Add more about Model Fitting, Validation/Metrics, Model Fit process)
+
+## Dataset Link & Data Overview
 
 [National Women’s Soccer League Team Statistics](https://data.scorenetwork.org/soccer/nwsl-team-stats.html#data)
 
@@ -28,5 +45,6 @@ The dataset utilized has the following parameters:
 |shot_accuracy | Percentage of shots on target|
 |tackle_success_pct | Percent of successful tackles|
 
-## Project Overview
+Note: Because goal_differential is equal to goals - goals_conceded, we will remove the goals and goals_conceded columns from our dataset.
 
+## Exploratory Data Analysis
