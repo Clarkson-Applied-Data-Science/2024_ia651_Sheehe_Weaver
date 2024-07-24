@@ -307,7 +307,7 @@ Using this new dataset and applying linear regression we calculated the weight a
 |Weight |5.59397384684628 |1.1208677444194222 |4.265529209544452 |0.12437191275278267 |
 |Intercept |-2.443881915550918 |1.596366457623861 |3.982261158683513 |2.014217812686465 |
 
-To validate and understand these results we calculated the Mean Squared Error and the R² Value using a train test split. With a train test split of 20:80 and a random state of 42, the following calculation were made:
+To validate and understand these results we calculated the Mean Squared Error and the R² Value using a train test split. With a train test split of 80:20 and a random state of 42, the following calculation were made:
 
 **Training MSE:** 189.6294515647826
 
