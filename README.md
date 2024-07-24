@@ -29,6 +29,14 @@ Kelsey Sheehe & Sarah Weaver
 6. [Decision Tree Regressor](#decision-tree-regressor)
 7. [Principal Component Analysis](#principal-component-analysis)
 
+    7.1 [Linear Regression - PCA](#linear-regression---pca)
+
+    7.2 [SVR - PCA](#srv---pca)
+
+8. [Conclusions](#conclusions)
+
+    8.1 [Project Limitations](#project-limitations)
+
 
 ## Project Overview
 
@@ -96,9 +104,38 @@ Below is a sample of this dataset without any modifications:
 
 ## Exploratory Data Analysis
 
+Before performing any of our machine learning modeling techniques to the data set we wanted to investigate the data further. A variety of correlation images, scatter plots, histograms and other images were created to get an appropriate understanding of the data and features in for our project.
+
+The .describe method was used to get summary statistics of the numeric values in the data set and are shown in the table below:
+
+|    |games_played |goal_differential |goals |goals_conceded |cross_accuracy |goal_conversion_pct |pass_pct |pass_pct_opposition_half |possession_pct |shot_accuracy |tackle_success_pct| 
+|----|-------------|------------------|------|---------------|---------------|--------------------|---------|-------------------------|---------------|--------------|------------------|
+|count |59.000000 |59.000000 |59.000000 |59.000000 |59.000000 |59.000000 |59.000000 |59.000000 |59.000000 |59.000000 |59.000000 |
+|mean |23.593220 |0.491525 |31.254237 |30.762712 |23.829153 |12.804407 |73.234068 |63.746271 |50.033898 |46.563220 |67.517627 |
+|std |1.772575 |15.054353 |10.411521 |8.173420 |2.720766 |3.000926 |3.450056 |3.976299 |3.162093 |3.988194 |8.643450 |
+|min |20.000000 |-33.000000 |12.000000 |17.000000 |18.420000 |5.430000 |62.600000 |53.710000 |41.000000 |35.190000 |56.870000 |
+|max |27.000000 |41.000000 |62.000000 |52.000000 |33.160000 |20.000000 |79.990000 |72.140000 |58.000000 |54.020000 |86.340000 |
+
+Histograms of each column were made to see the normality of each feature and if there are any points of concern before moving on to modeling. Overall, the histograms looked good and showed no evidence of extreme outliers and relatively normal looking distributions for most features. Some of these histograms are shown below:
+
+![shot_accuracy histogram](shot_accuracy_histogram.png)
+
+![pass_pct histogram](pass_pct_histogram.png)
+
+![possession_pct histogram](possession_pct_histogram.png)
+
+A correlation matrix of the features of interest and the response variable was made:
+
 ![Image of correlation matrix](correlation_matrix_2.png)
 
-Add in images of significant data graphs and findings
+The correlation matrix above shows that is a strong correlation between pass_pct_opposition_half and pass_pct, possession_pct and pass_pct, and shot_accuracy and goal_conversion_pct.
+
+A pair plot was created as well to look at correlation and the relationship between the data as shown below:
+
+![Correlation pair plot](Correlation_Pair_Plot.png)
+
+Showing similar findings as the other correlation matrix, as expected.
+
 
 ### Scaling the Data
 
@@ -288,6 +325,53 @@ After performing linear regression on the 4 PCs that account for over 90% of the
 |PC 2 |3.7619854415126275 |
 |PC 3 |4.515514034026799 |
 |PC 4 |4.965233943838386 |
+|Intercept |-0.15721666910229298 |
+
+With training and testing MSE and R² values as shown below:
+
+**Training MSE:** 106.29153344848993
+
+**Test MSE:** 72.95560629326467
+
+**Training R Squared:** 0.43808872581053204
+
+**Test R Squared:** 0.793955178648869
+
+The training and testing MSE are lower for this linear regression with PCA and closer to each other. In addition to that, the R Squared values are closer to positive one, showing an improvement in this model over linear regression without PCA.
+
+### SVR - PCA
+
+Similar to re-preforming Linear Regression with the PCA data, the same process was done for SVR.
+
+A grid search was performed with the following C and gamma values being tested:
+
+    C = [0.1, 1, 10, 100, 1000, 10000, 20000]
+    gamma = [1, 0.1, 0.01, 0.001, 0.0001]
+
+This resulted in an optimal gamma and C value of:
+
+    C = 20000
+    gamma = 0.001
+
+After performing SVR with these optimal parameters, the following training and testing MSE and R Squared values were calculated:
+
+|Train/Test |MSE |R² |
+|-----------|----|---|
+|Training |111.06981553009075 |0.4128282889177838 |
+|Testing |90.8089157683958 |0.7435329815315865 |
+
+Similar to the results of performing Linear Regression with the PCA data, the SVR data showed improvement with the PCA data. The training and testing MSEs are closer to one another and the R Squared values have gotten closer to positive one. 
 
 [Go To Top](#machine-learning-final-project)
 
+## Conclusions
+
+Overall, the models using non PCA data performed relatively weak compared to models created using PCA. Using PCA was very successful for this project and allowed for 4 principal components out of 8 to account for just over 90% of the variance in the model.
+
+### Project Limitations
+
+One of the greatest limitations of this project was the size of the data set. This data set only contained 59 observations. When performing operations like a train test split, this left very few observations in the testing data set, which can account for some of the large differences in training and testing MSE and the weak R Squared values.
+
+If given more time and if it was more easily available, I think that it would have strengthened the project to find more data on the teams that this data set followed or find another similar dataset of a different soccer league and see how combining those observations would work for predicting goal_differential. 
+
+[Go To Top](#machine-learning-final-project)
