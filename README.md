@@ -46,7 +46,7 @@ Kelsey Sheehe & Sarah Weaver
 
 ## Project Overview
 
-[Project Code](IA651_Project_Code.ipynb)
+All code for this project is in the repository titled "IA651_Project_Code.ipynb"
 
 ### Importance
 
