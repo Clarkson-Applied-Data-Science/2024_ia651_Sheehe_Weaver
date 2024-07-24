@@ -33,9 +33,15 @@ Kelsey Sheehe & Sarah Weaver
 
     7.2 [SVR - PCA](#srv---pca)
 
-8. [Conclusions](#conclusions)
+8. [Binned Data](#binned-data)
 
-    8.1 [Project Limitations](#project-limitations)
+    8.1 [Logistic Regression](#logistic-regression)
+
+    8.2 [SVC](#svc)
+
+9. [Conclusions](#conclusions)
+
+    9.1 [Project Limitations](#project-limitations)
 
 
 ## Project Overview
@@ -364,9 +370,61 @@ Similar to the results of performing Linear Regression with the PCA data, the SV
 
 [Go To Top](#machine-learning-final-project)
 
+## Binned Data
+
+To try one final method we binned our response variable, goal_differential, into two categories, positive and negative.
+
+    pd.cut(soccer_data["goal_differential"], bins = [-34, 0 ,45], labels = ["negative", "positive"])
+
+### Logistic Regression
+
+Now that we have a response variable that is categorical we fit a logistic regression on the scaled X data.
+
+The training accuracy and F1 scores can be shown in the table below:
+
+|Train/Test |Accuracy |F1 Score |
+|-----------|----|---|
+|Training |0.851063829787234 |0.8485964104924069 |
+|Testing |0.8333333333333334 |0.8285714285714285 |
+
+While the model is making a much simpler prediction (positive or negative goal_differential) these values in the table are relatively good and we continued with the binned data and fit SVC.
+
+### SVC
+
+The metrics for SVC are in the table below:
+
+|Train/Test |Accuracy |F1 Score |
+|-----------|----|---|
+|Training |1.0 |1.0 |
+|Testing |0.5 |0.4375 |
+
+The training accuracy and F1 score for this model are very good, however the testing values are not as good. This could be attributed to the small size of the testing data.
+
+Like with the un-binned data, we performed a grid search to find the optimal C and gamma parameters. The optimal values are:
+
+    C = 1
+    gamma = 0.1
+
+The metrics for SVC with these new gamma and C parameters are in the table below:
+
+|Train/Test |Accuracy |F1 Score |
+|-----------|----|---|
+|Training |0.9574468085106383 |0.9569597069597069 |
+|Testing |0.8333333333333334 |0.8333333333333334 |
+
+Using the optimal gamma and C parameters, the testing accuracy and F1 score improve a lot.
+
+To finish our project we created a confusion matrix to see when the model is tested how many times it can predict if a team will have a positive or negative goal_differential. 
+
+![Confusion_matrix](confussion_matrix.png)
+
+[Go To Top](#machine-learning-final-project)
+
 ## Conclusions
 
 Overall, the models using non PCA data performed relatively weak compared to models created using PCA. Using PCA was very successful for this project and allowed for 4 principal components out of 8 to account for just over 90% of the variance in the model.
+
+After binning the data and using Logistic Regression and SVC we would make more accurate predictions on if a team would have a positive or negative goal_differential. 
 
 ### Project Limitations
 
