@@ -46,7 +46,7 @@ Kelsey Sheehe & Sarah Weaver
 
 ## Project Overview
 
-[Project Code](../IA651_Project_Code.ipynb)
+[Project Code](IA651_Project_Code.ipynb)
 
 ### Importance
 
