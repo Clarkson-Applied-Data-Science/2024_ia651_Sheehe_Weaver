@@ -56,7 +56,7 @@ The goal for this project is to create a formula to predict a team's goal_differ
 
 To tackle this project our team used a variety of machine learning techniques learned though out this course. To start we evaluated and examined out selected data. Multiple figures were created to better understand each variable and their relationship with others. The Exploratory Data Analysis was key in determining what processes we should try on our data. 
 
-The first method implemented was Linear Regression which yielded both a poor Mean Squared Error (MSE) and R Squared value for training and testing data. 
+The first method implemented was Linear Regression which yielded relatively good training and resting MSE and a good test R Squared value.
 
 Support Vector Regression (SVR) was chosen next and a grid search was performed to find the optimal values for parameters gamma and C. This was done without a pipeline and with a pipeline, where the pipeline had a minimal effect of the success of the model.
 
@@ -65,6 +65,8 @@ Next, a Decision Tree Regressor was fit on the model and the optimal max depth w
 For most of the models fit on our dataset, relatively poor R Squared and MSE values were calculated. This can be attributed partially to the limited size of the dataset, with only 59 observations.
 
 To try and remedy this, and given high correlation for some of the features that was noticed in the EDA, we opted to perform Principal Component Analysis (PCA) to attempt to reduce the number of features see if there would be any improvement in the MSE or R Squared Value in the Linear Regression or SVR. This showed some success in improving both the R Squared values and MSE values. 
+
+To try even more modeling techniques in this project, we also wanted to be able to treat this data as categorical and be able to fit more models. We categorized goal_differential into two bins, a positive goal_differential and a negative goal_differential. With this categorical response variable, SVC and Logistic Regression were used. These results were promising and new metrics were evaluated including a confusion matrix.
 
 [Go To Top](#machine-learning-final-project)
 
@@ -145,6 +147,8 @@ Showing similar findings as the other correlation matrix, as expected.
 
 ### Scaling the Data
 
+For all models, a train test split of 80:20 was used before the data was scaled.
+
 After removing team_name, season, goals, and goals_conceded from the dataset the following were chosen for the X and y variables:
 
 |Variable Classification |Feature Name|
@@ -159,9 +163,7 @@ After removing team_name, season, goals, and goals_conceded from the dataset the
 |X |shot_accuracy |
 |X |tackle_success_pct |
 
-A standard scalar was used to scale the data in the X data frame for each column to have a mean of one.
-
-For all models, a train test split of 80:20 was used.
+A standard scalar was used to scale the data in the X data frame for each column to have a mean of one (after the train test split).
 
 [Go To Top](#machine-learning-final-project)
 
@@ -169,33 +171,30 @@ For all models, a train test split of 80:20 was used.
 
 Linear regression model was implemented on the scaled X and the y data mentioned above. 
 
-The following table can be made for each feature's calculated Slope, Intercept, and MSE:
+The following table is a portion of the OLS Regression Results table: 
 
-|Feature |Slope |Intercept |MSE |
-|--------|------|----------|----|
-|games_played |3.239550624855535 |0.5710852517075659 |286.62714877107004 |
-|cross_accuracy |3.202459249277016 |0.4654590848623572 |261.77453329224016 |
-|goal_conversion_pct |7.002452039983725 |-0.08534455399145413 |207.15565593040034 |
-|pass_pct |2.717429038568445 |-0.07788673346689057 |364.0893350716194 |
-|pass_pct_opposition_half |3.7356333981648695 |-0.19010077263594233 |357.17641808210493 |
-|possession_pct |6.600571495678313 |-0.5288842162613081 |330.6455545141905 |
-|shot_accuracy |3.8881100609064667 |0.11492861617881348 |304.8185490470135 |
-|tackle_success_pct |-1.9175170515167377 |0.33962348341308035 |379.8924941977164 |
+|-----|coef |std err |t |P value |
+|-----|--------|------|----------|----|
+|constant |-174.1129 |57.416 |-3.032 |0.004 |
+|games_played |2.6139 |0.890 |2.937 |0.005 |
+|cross_accuracy |1.8134 |0.501 |3.619 |0.001 |
+|goal_conversion_pct |2.4278 |0.569 |4.266 |0.000 |
+|pass_pct |-0.8835 |0.952 |-0.928 |0.358 |
+|pass_pct_opposition_half |0.3619 |0.702 |0.515 |0.609 |
+|possession_pct |1.7816 |1.7816 |2.927 |0.005 |
+|shot_accuracy |-0.1419 |0.456 |-0.311 |0.757 |
+|tackle_success_pct |-0.0336 |0.214 |-0.157 |0.876 |
+
+The factors with a P value less than 0.05 and that can be deemed statistically significant for this model are: const, games_played, cross_accuracy, goal_conversion_pct, and possession_pct. 
 
 And the overall MSE and R Squared for this model are shown below:
 
 |Train/Test |MSE |R² |
 |-----------|----|---|
-|Training |185.25952161895665 |0.020623652032577433 |
-|Testing |379.8924941977164 |-0.07291111782358617 |
+|Training |87.18987249386363 |0.53906985100382723 |
+|Testing |78.94283999537852 |0.7770457379462508 |
 
-The training and testing MSEs are not close to each other and the R² value for training and testing both are poor.
-
-The Test Data and Prediction were formed into the following graph:
-
-![Linear Regression - Test and Prediction Graph](linear_regression_plot_1.png)
-
-This graph illustrates how few data points are in this data set and how few end up in the test split, contributing to the high MSE values calculated.
+The training and testing MSEs are close to each other and not too high, in addition to that the testing R Squared value is close to one and shown that this model is a good representation of the data.
 
 [Go To Top](#machine-learning-final-project)
 
@@ -215,25 +214,25 @@ And the following gamma and C values were tested:
 This fit 5 folds for 35 candidates, totalling 175 fits. The results from the grid search are below:
 
     gamma = 0.1
-    C = 100
+    C = 10
 
 With these optimal hyper parameters SVR was performed and the MSE and R Squared for this model were calculated and are shown below:
 
 |Train/Test |MSE |R² |
 |-----------|----|---|
-|Training |186.17495008595955 |0.01578423011782837 |
-|Testing |437.562009145412 |-0.23578420611017203 |
+|Training |54.37376168001874 |0.7125525550640378 |
+|Testing |213.89481569990585 |0.39590771253875593 |
 
-The training and testing MSE for this model performed worse than the Linear Regression. The MSEs have an even greater distance between each other. 
+The training and testing MSE for this model performed worse than the Linear Regression. The MSEs have an even greater distance between each other. However, the MSE and R Squared values were much better after the grid search and using the optimal C and gamma parameters. The good training R Squared value and the poor testing R Squared value could be attributed to the limited amount of data in the testing data set because of the size of the original data set. 
 
 A pipeline was tested out to try and obtain better results but the optimal gamma and C parameters that were chosen were the same as the SVR without the pipeline. However, because the pipeline effects the scalar the new MSE and R² are shown as the following:
 
 |Train/Test |MSE |R² |
 |-----------|----|---|
-|Training |186.18807154272227 |0.015714863403005985 |
-|Testing |438.19020105537635 |0.23755837668374724 |
+|Training |55.25228168331632 |0.7079082501185916 |
+|Testing |346.5619419168241 |0.02122267173941028 |
 
-These results are very similar to the SVR performed without the pipeline and are overall not very good.
+These results are actually worse than the SVR performed without the pipeline, and are overall not very good.
 
 [Go To Top](#machine-learning-final-project)
 
@@ -249,6 +248,8 @@ This resulted in a optimal max_depth of 2. With this max depth found, the decisi
 
 ![Decision Tree Regressor Image, Max Depth = 2](decision_tree_regressor_image.png)
 
+This decision tree allows us to see what features are used to make splits on and at what values. You can follow the tree down to get an understanding of what may predict certain goal_differentials.
+
 [Go To Top](#machine-learning-final-project)
 
 ## Random Forest Regressor
@@ -260,12 +261,16 @@ After implementing the decision tree regressor a random forest regressor was fit
 
 The optimal parameters that the grid search found were:
 
-    max_depth = 2
-    n_estimators = 10
+    max_depth = 50
+    n_estimators = 20
+
+Creating a decision tree with the max depth of 50 resulted in the following tree:
+
+![Decision tree with max depth 50](decision_tree_50_depth.png)
 
 With these optimal parameters used in the random forest regressor model the features could be ranked by importance to the model. The following graph illustrates each features importance:
 
-![Feature Importance - Random Forest](feature_importance_random_forest.png)
+![feature importance](feature_importance_2.png)
 
 This graph shows us that goal_conversion_pct dominates the other features in importance for this model.
 
@@ -281,7 +286,7 @@ After performing PCA on the dataset and setting *n_components* equal to 0.9 (mea
 
 A scree plot of these principal components can be shown below:
 
-![alt text](PCA_scree_plot.png)
+![PCA Scree Plot 4 PCs](PCA_scree_plot.png)
 
 Below is a sample data frame using these 4 Principal Components (PCs):
 
@@ -300,50 +305,29 @@ To better interpret this information, we created a single loading chart, as show
 
 From this chart, we can see that pass_pct and pass_pct_opposition_half contribute to the first principal component, and shot_accuracy and goal_conversion_pct contribute to the second.
 
-Using this new dataset and applying linear regression we calculated the weight and intercept for these 4 PCs. The following table displays the calculated results:
-
-|   |PC 1 |PC 2 |PC 3 |PC 4 |
-|---|-----|-----|-----|-----|
-|Weight |5.59397384684628 |1.1208677444194222 |4.265529209544452 |0.12437191275278267 |
-|Intercept |-2.443881915550918 |1.596366457623861 |3.982261158683513 |2.014217812686465 |
-
-To validate and understand these results we calculated the Mean Squared Error and the R² Value using a train test split. With a train test split of 80:20 and a random state of 42, the following calculation were made:
-
-**Training MSE:** 189.6294515647826
-
-**Test MSE:** 231.39369800935484
-
-**Training R Squared:** 3.6*10⁻⁵
-
-**Test R Squared:** -0.007156
-
-Unfortunately, we calculated a very high MSE and R Squared values that are very close to zero. This shows weakness in our model and encouraged us to look at other methods for this project. However, the training MSE and testing MSE are closer than they have been for some of the other models.
-
 To see if using PCA has an impact on the model, Linear Regression and SVR were re-preformed with the PCA data frame. 
 
 ### Linear Regression - PCA
 
-After performing linear regression on the 4 PCs that account for over 90% of the variance, each PCs slope, intercept, train MSE, and test MSE were calculated and shown in the table below:
+Using this new dataset and applying linear regression we calculated the weight and intercept for these 4 PCs. The following table displays the calculated results:
 
 |Feature |Slope |
 |--------|------|
 |PC 1 |3.075553762964335 |
 |PC 2 |3.7619854415126275 |
 |PC 3 |4.515514034026799 |
-|PC 4 |4.965233943838386 |
-|Intercept |-0.15721666910229298 |
+|PC 3 |4.965233943838386 |
 
-With training and testing MSE and R² values as shown below:
+Intercept = -0.15721666910229298
 
-**Training MSE:** 106.29153344848993
+After performing linear regression on the 4 PCs that account for over 90% of the variance, each PCs slope, intercept, train MSE, and test MSE were calculated and shown in the table below, to validate and understand these results:
 
-**Test MSE:** 72.95560629326467
+|Train/Test |MSE |R² |
+|-----------|----|---|
+|Training |106.29153344848993 |0.43808872581053204 |
+|Testing |72.95560629326467 |0.793955178648869 |
 
-**Training R Squared:** 0.43808872581053204
-
-**Test R Squared:** 0.793955178648869
-
-The training and testing MSE are lower for this linear regression with PCA and closer to each other. In addition to that, the R Squared values are closer to positive one, showing an improvement in this model over linear regression without PCA.
+These values were relatively good, but similar to the results that performing Linear Regression without the PCA data yielded. However, the advantage to using the PCA data is that you can use only 4 PCs instead of 8 features to get these results.
 
 ### SVR - PCA
 
@@ -418,11 +402,13 @@ To finish our project we created a confusion matrix to see when the model is tes
 
 ![Confusion_matrix](confussion_matrix.png)
 
+This confusion matrix shows that for both positive and negative labeling, the model predicts correctly 5 out of 6 times for an accuracy of 83.33%.
+
 [Go To Top](#machine-learning-final-project)
 
 ## Conclusions
 
-Overall, the models using non PCA data performed relatively weak compared to models created using PCA. Using PCA was very successful for this project and allowed for 4 principal components out of 8 to account for just over 90% of the variance in the model.
+Overall, before the data was binned, Linear Regression and SVR preformed similar with or without the PCA data and in some cases Linear Regression was the ideal model to use. The advantage to PCA for this data set was that you could use only 4 of the 8 PCs to account for over 90% of the variation in the model. 
 
 After binning the data and using Logistic Regression and SVC we would make more accurate predictions on if a team would have a positive or negative goal_differential. 
 
