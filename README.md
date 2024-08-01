@@ -39,14 +39,26 @@ Kelsey Sheehe & Sarah Weaver
 
     8.2 [SVC](#svc)
 
-9. [Conclusions](#conclusions)
+9. [Modified Input Variables](#modified-input-variables)
 
-    9.1 [Project Limitations](#project-limitations)
+    9.1 [Linear Regression - Modified](#linear-regression---modified)
+
+    9.2 [SVR - Modified](#svr---modified)
+
+10. [Testing Model Predictions](#testing-model-predictions)
+
+    10.1 [Data from Source](#data-from-source)
+
+    10.2 [Synthesized Data](#synthesized-data)
+
+11. [Conclusions](#conclusions)
+
+    11.1 [Project Limitations](#project-limitations)
 
 
 ## Project Overview
 
-All code for this project is in the repository titled "IA651_Project_Code.ipynb"
+Project code is in the repository titled "IA651_Project_Code.ipynb"
 
 ### Importance
 
@@ -67,6 +79,12 @@ For most of the models fit on our dataset, relatively poor R Squared and MSE val
 To try and remedy this, and given high correlation for some of the features that was noticed in the EDA, we opted to perform Principal Component Analysis (PCA) to attempt to reduce the number of features see if there would be any improvement in the MSE or R Squared Value in the Linear Regression or SVR. This showed some success in improving both the R Squared values and MSE values. 
 
 To try even more modeling techniques in this project, we also wanted to be able to treat this data as categorical and be able to fit more models. We categorized goal_differential into two bins, a positive goal_differential and a negative goal_differential. With this categorical response variable, SVC and Logistic Regression were used. These results were promising and new metrics were evaluated including a confusion matrix.
+
+To evaluate the data set in a slightly different, way we preformed linear regression and SVR again but on a modified dataset. We removed the features shot_accuracy and goal_conversion_pct which represent a team's percentage of shots on target and percent of shots scored per season respectively. These models both resulted in some pos and cons and could be a utilized if the you did not have any attributes related to a team's goals for a season.
+
+Finally to evaluate the model that we felt performed the best based on its metrics and other observations, we tested the model using four predictions from our data set and two predictions from synthesized data.
+
+
 
 [Go To Top](#machine-learning-final-project)
 
@@ -171,19 +189,19 @@ A standard scalar was used to scale the data in the X data frame for each column
 
 Linear regression model was implemented on the scaled X and the y data mentioned above. 
 
-The following table is a portion of the OLS Regression Results table: 
+The coefficient results and intercept value is shown in the table below:
 
-|-----|coef |std err |t |P value |
-|-----|--------|------|----------|----|
-|constant |-174.1129 |57.416 |-3.032 |0.004 |
-|games_played |2.6139 |0.890 |2.937 |0.005 |
-|cross_accuracy |1.8134 |0.501 |3.619 |0.001 |
-|goal_conversion_pct |2.4278 |0.569 |4.266 |0.000 |
-|pass_pct |-0.8835 |0.952 |-0.928 |0.358 |
-|pass_pct_opposition_half |0.3619 |0.702 |0.515 |0.609 |
-|possession_pct |1.7816 |1.7816 |2.927 |0.005 |
-|shot_accuracy |-0.1419 |0.456 |-0.311 |0.757 |
-|tackle_success_pct |-0.0336 |0.214 |-0.157 |0.876 |
+|Feature |Coefficients |
+|--------|-------------|
+|games_played |2.9415 |
+|cross_accuracy |3.6621 |
+|goal_conversion_pct |6.6827 |
+|pass_pct |-3.89538562 |
+|pass_pct_opposition_half |1.9371 |
+|possession_pct |6.51267 |
+|shot_accuracy | -0.9529 |
+|tackle_success_pct |-0.9305 |
+|Intercept |0.3404 |
 
 The factors with a P value less than 0.05 and that can be deemed statistically significant for this model are: const, games_played, cross_accuracy, goal_conversion_pct, and possession_pct. 
 
@@ -406,11 +424,120 @@ This confusion matrix shows that for both positive and negative labeling, the mo
 
 [Go To Top](#machine-learning-final-project)
 
+## Modified Input Variables
+
+To make even more predictions with the selected data set we performed Linear Regression and SVR again but now without the features shot_accuracy and goal_conversion_pct which represent a team's percentage of shots on target and percent of shots scored per season respectively. This modification was a suggestion to us, to see how removing variables that are directly related to a team's goal_differential.
+
+The dependent variables for this model are shown in a sample below, before scaling:
+
+|games_played |cross_accuracy |pass_pct |pass_pct_opposition_half |possession_pct |tackle_success_pct |
+|-------------|---------------|---------|-------------------------|---------------|-------------------|
+|20 |25.57 |67.38 |57.86 |47 |77.42 |
+|24 |23.70 |72.53 |61.42 |48 |73.49 |
+|21 |21.19 |67.35 |57.74 |46 |84.32 |
+|25 |21.08 |69.23 |61.52 |47 |71.29 |
+|25 |25.96 |71.63 |64.55 |51 |67.97 |
+
+
+The code for these new models is in the repository titled "IA651_Project_Code_Part2.ipynb"
+
+### Linear Regression - Modified
+
+With the new features selected, split into a training and testing set, and scaled the final linear regression model was fit. The coefficient results and intercept value is shown in the table below:
+
+|Feature |Coefficients |
+|--------|-------------|
+|games_played |2.3085 |
+|cross_accuracy |2.8298 |
+|pass_pct |-5.2246 |
+|pass_pct_opposition_half |2.4608 |
+|possession_pct |8.2721 |
+|tackle_success_pct |-1.9929 |
+|Intercept |0.3404 |
+
+After performing linear regression on this new data set, each feature's train MSE, and test MSE were calculated and shown in the table below, to validate and understand these results:
+
+|Train/Test |MSE |R² |
+|-----------|----|---|
+|Training |121.88 |0.36 |
+|Testing |192.14 |0.46 |
+
+The training and testing MSE are higher than the values for the linear regression with all of the dependent variables. A similar conclusion can be made for the R² values. These R² are less close to 1 than the original linear regression model and show this model is a poorer fit to the data.
+
+### SVR - Modified
+
+A similar process was done with this modified data set but with SVR. A grid search was used to find an optimal gamma and C value with the same gamma and C values tested as in the previous SCR model and the optimal gamma value found was 0.1 and C was 1000. 
+
+An SVR model fit with these hyper parameters and the modified data resulted in the following metrics:
+
+|Train/Test |MSE |R² |
+|-----------|----|---|
+|Training |68.0004 |0.6405 |
+|Testing |438.19602 |0.2376 |
+
+
+Similar to the linear regression model fit with this data, the training and testing MSE and R² values were weaker than when the model was fit with all of the dependent variables available.
+
+[Go To Top](#machine-learning-final-project)
+
+
+## Testing Model Predictions
+
+The model that we selected to test data from the source and synthesized data was the original linear regression model on all of the dependent variables. Given this models MSE and R² values we felt this model was the optimal model and showed no signs of being over fit.
+
+The linear regression model produced the following coefficient and intercept values:
+
+|Feature |Coefficients |
+|--------|-------------|
+|games_played |2.9415 |
+|cross_accuracy |3.6621 |
+|goal_conversion_pct |6.6827 |
+|pass_pct |-3.89538562 |
+|pass_pct_opposition_half |1.9371 |
+|possession_pct |6.51267 |
+|shot_accuracy | -0.9529 |
+|tackle_success_pct |-0.9305 |
+|Intercept |0.3404 |
+
+The code for this testing is in the repository titled "IA651_Project_Code_Part3.ipynb"
+
+### Data from Source
+
+To test data from the data set, we randomly selected four of the rows from the original data set. The four selected rows are shown below:
+
+|Row Index |Team Name |season |games_played |goal_differential |goals |goals_conceded |cross_accuracy |goal_conversion_pct |pass_pct |pass_pct_opposition_half |possession_pct |shot_accuracy |tackle_success_pct| 
+|----------|---------|-----------|---------|-----------|---------|-----------|---------|-----------|---------|-----------|---------|-----------|---------|
+|47 |North Carolina Courage |2018 |26 |41 |58 |17 |33.16 |14.15 |71.06 |63.15 |50 |46.10 |73.84 |
+|18 |NJ/NY Gotham FC |2018 |24 |-31 |21 |52 |24.91 |9.38 |72.07 |63.06 |48 |45.54 |70.29 |
+|56 |Racing Louisville FC |2022 |22 |-12 |23 |35 |20.18 |11.50 |72.50 |62.09 |49 |42.00 |62.87 |
+|13 |Houston Dash |2019 |24 |-15 |21 |36 |20.27 |9.33 |73.27 |62.45 |48 |45.87 |60.61 |
+
+After making prediction using the appropriate columns for the dependent variables the following table, comparing the actual goal_differential and the predicted goal_differential:
+
+|Row Index| Actual |Predicted |
+|---------|---------|-------------|
+|47 |41 |36.4176 |
+|18 |-31 |-9.7263 |
+|56 |-12 |-5.2005 |
+|13 |-15 |-20.1290 |
+
+These results do predict successful if the goal_differential is positive or negative for all four rows but, the predicted and actual values are not very close, especially for the row 18 data.
+
+
+### Synthesized Data
+
+
+
+[Go To Top](#machine-learning-final-project)
+
 ## Conclusions
 
 Overall, before the data was binned, Linear Regression and SVR preformed similar with or without the PCA data and in some cases Linear Regression was the ideal model to use. The advantage to PCA for this data set was that you could use only 4 of the 8 PCs to account for over 90% of the variation in the model. 
 
 After binning the data and using Logistic Regression and SVC we would make more accurate predictions on if a team would have a positive or negative goal_differential. 
+
+The upside of performing Linear Regression and SVR with the modified data set which did not contain variables that are directly related to a team's goal_differential is that you can make a prediction with less information about a team's goal data. The downside of those models were that they performed worse than the models fit without restriction. Intuitively this makes sense and there is a trade off for each type of model.
+
 
 ### Project Limitations
 
