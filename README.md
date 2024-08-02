@@ -526,7 +526,36 @@ These results do predict successful if the goal_differential is positive or nega
 
 ### Synthesized Data
 
+To evaluate our model one last time we created two rows of synthetic data. We wanted to see how that data would perform for a team that had overall poor season statistics and a team that had overall good season statistics. The hope of our model is that the "good team" would have a higher goal_differential than the "bad team".
 
+To create this data we look at the mean and standard deviation of the data set. The "good team" will have data for each feature that is two standard deviations away from the mean either in the positive or negative direction depending on what the feature is and if a higher number is a good thing or a bad thing. The same process is done for the "bad team" to obtain a row of data that correlates to a team performing worse than the mean of the data.
+
+The features that we selected that if they are higher would mean a team is performing better are:
+
+* cross_accuracy
+* goal_conversion_pct
+* pass_pct
+* pass_pct_opposition_half
+* possession_pct
+* shot_accuracy
+* tackle_success_pct
+
+The only feature used in the linear regression model what we believe would not determine if a team is more successful in a season is the number of games played, so for both the "good team" and "bad team" we kept it at the mean of 23.593220.
+
+The created synthetic data is shown below in the table:
+
+|Team Name |games_played |cross_accuracy |goal_conversion_pct |pass_pct |pass_pct_opposition_half |possession_pct |shot_accuracy |tackle_success_pct|
+|----------|-------------|---------------|--------------------|---------|-------------------------|----------------|--------------|-----------------|
+|Good Team |23.59322 |29.270685 |18.806259 |80.134180 |71.698869 |56.358084 |54.539608 |84.804572 |
+|Bad Team |23.59322 |18.387621 |6.802555 |66.333956 |55.793673 |43.709712 |38.586832 |50.230772 |
+
+The results from using the linear regression to predict goal_differential with the synthetic data are below:
+
+|Team |Predicted goal_differential |
+|Good Team |13.35625727 |
+|Bad Team |-12.6754062 |
+
+Using the synthetic data and making a team that performed with features above and below the mean we were able to use the linear regression model to predict those team's goal_differential. The results showed the the "good team" had a positive goal_differential and the "bad team" had a negative. This validates our intuition that a team who performs better throughout the season will out score their opponents and have a positive goal_differential. 
 
 [Go To Top](#machine-learning-final-project)
 
