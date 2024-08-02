@@ -553,6 +553,7 @@ The created synthetic data is shown below in the table:
 The results from using the linear regression to predict goal_differential with the synthetic data are below:
 
 |Team |Predicted goal_differential |
+|-----|----------------------------|
 |Good Team |13.35625727 |
 |Bad Team |-12.6754062 |
 
