@@ -27,33 +27,34 @@ Kelsey Sheehe & Sarah Weaver
 4. [Linear Regression](#linear-regression)
 5. [SVR](#svr)
 6. [Decision Tree Regressor](#decision-tree-regressor)
-7. [Principal Component Analysis](#principal-component-analysis)
+7. [Random Forest Regressor](#random-forest-regressor)
+8. [Principal Component Analysis](#principal-component-analysis)
 
-    7.1 [Linear Regression - PCA](#linear-regression---pca)
+    8.1 [Linear Regression - PCA](#linear-regression---pca)
 
-    7.2 [SVR - PCA](#srv---pca)
+    8.2 [SVR - PCA](#srv---pca)
 
-8. [Binned Data](#binned-data)
+9. [Binned Data](#binned-data)
 
-    8.1 [Logistic Regression](#logistic-regression)
+    9.1 [Logistic Regression](#logistic-regression)
 
-    8.2 [SVC](#svc)
+    9.2 [SVC](#svc)
 
-9. [Modified Input Variables](#modified-input-variables)
+10. [Modified Input Variables](#modified-input-variables)
 
-    9.1 [Linear Regression - Modified](#linear-regression---modified)
+    10.1 [Linear Regression - Modified](#linear-regression---modified)
 
-    9.2 [SVR - Modified](#svr---modified)
+    10.2 [SVR - Modified](#svr---modified)
 
-10. [Testing Model Predictions](#testing-model-predictions)
+11. [Testing Model Predictions](#testing-model-predictions)
 
-    10.1 [Data from Source](#data-from-source)
+    11.1 [Data from Source](#data-from-source)
 
-    10.2 [Synthesized Data](#synthesized-data)
+    11.2 [Synthesized Data](#synthesized-data)
 
-11. [Conclusions](#conclusions)
+12. [Conclusions](#conclusions)
 
-    11.1 [Project Limitations](#project-limitations)
+    12.1 [Project Limitations](#project-limitations)
 
 
 ## Project Overview
@@ -280,11 +281,11 @@ After implementing the decision tree regressor a random forest regressor was fit
 The optimal parameters that the grid search found were:
 
     max_depth = 50
-    n_estimators = 20
+    n_estimators = 500
 
 Creating a decision tree with the max depth of 50 resulted in the following tree:
 
-![Decision tree with max depth 50](decision_tree_50_depth.png)
+![Decision Tree with Max Depth 50 and n Estimators 500](Random_Forest_Decision_Tree_500.png)
 
 With these optimal parameters used in the random forest regressor model the features could be ranked by importance to the model. The following graph illustrates each features importance:
 
